@@ -1,17 +1,15 @@
-# Created by: Mr. Coxall
-# Created on: Nov 2017
+# Created by: Matthew Walsh
+# Created on: dec 2017
 # Created for: ICS3U
-# This scene shows a splash screen for 2 seconds,
-#   then transitions to the main menu.
 
 from scene import *
 import ui
 import time
 
-from game_logo_scene import *
+from main_menu_scene import *
 
 
-class SplashScene(Scene):
+class GameLogoScene(Scene):
     def setup(self):
         # this method is called, when user moves to this scene
         
@@ -20,20 +18,19 @@ class SplashScene(Scene):
         
         # add MT blue background color
         self.background = SpriteNode(position = self.size / 2, 
-                                     color = (0.61, 0.78, 0.87), 
+                                     color = 'black', 
                                      parent = self, 
                                      size = self.size)
-        self.school_crest = SpriteNode('./assets/sprites/MT_Game_Studio.png',
+        self.school_crest = SpriteNode('./assets/sprites/alien.png',
                                        parent = self,
-                                       position = self.size/2,
-                                       size = self.size)
-    
+                                       position = self.size/2)
+                                       
     def update(self):
         # this method is called, hopefully, 60 times a second
         
         # after 2 seconds, move to main menu scene
         if not self.presented_scene and time.time() - self.start_time > 1:
-            self.present_modal_scene(GameLogoScene())
+            self.present_modal_scene(MainMenuScene())
     
     def touch_began(self, touch):
         # this method is called, when user touches the screen
@@ -61,4 +58,3 @@ class SplashScene(Scene):
         # this method is called, when user place app from background 
         # back into use. Reload anything you might need.
         pass
-    
