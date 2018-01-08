@@ -6,6 +6,9 @@
 from scene import *
 import ui
 
+from game_scene import *
+from settings import *
+from tutorial import *
 
 class MainMenuScene(Scene):
     def setup(self):
@@ -34,11 +37,16 @@ class MainMenuScene(Scene):
                                        scale = 0.75)
         tutorial_button_position = Vector2(self.screen_center_x,
                                         self.screen_center_y)
-        self.tutorial_button = SpriteNode('./assets/sprites/start.png',
+        self.tutorial_button = SpriteNode('./assets/sprites/help.png',
                                        parent = self,
                                        position = tutorial_button_position,
                                        scale = 0.75)
-        
+        settings_button_position = Vector2(self.size.x - 200,
+                                           100)
+        self.settings_button = SpriteNode('./assets/sprites/menu_button.png',
+                                          parent = self,
+                                          position = settings_button_position,
+                                          scale = 0.75)
     
     def update(self):
         # this method is called, hopefully, 60 times a second
@@ -54,6 +62,17 @@ class MainMenuScene(Scene):
     
     def touch_ended(self, touch):
         # this method is called, when user releases a finger from the screen
+        
+        # if start button is pressed, goto game scene
+        if self.start_button.frame.contains_point(touch.location):
+            self.present_modal_scene(GameScene())
+            
+        # if start button is pressed, goto game scene
+        if self.tutorial_button.frame.contains_point(touch.location):
+            self.present_modal_scene(TutorialScene())
+            
+        if self.settings_button.frame.contains_point(touch.location):
+        	self.present_modal_scene(SettingsScene())
         pass
     
     def did_change_size(self):
