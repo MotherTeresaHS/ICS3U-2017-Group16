@@ -4,33 +4,27 @@
 
 from scene import *
 import ui
-import time
 
 from main_menu_scene import *
+from game_scene import *
 
 
-class GameLogoScene(Scene):
+class GameOverScene(Scene):
     def setup(self):
         # this method is called, when user moves to this scene
         
-        # create timer, so that after 2 seconds move to next scene
-        self.start_time = time.time()
+        center_of_screen = self.size/2
         
         # add background color
         self.background = SpriteNode(position = self.size / 2, 
-                                     color = 'black', 
+                                     color = 'blue', 
                                      parent = self, 
                                      size = self.size)
-        self.logo = SpriteNode('./assets/sprites/asteroid.png',
-                                       parent = self,
-                                       position = self.size/2,
-                                       size = self.size/2)
+      
+        
     def update(self):
         # this method is called, hopefully, 60 times a second
-        
-        # after 2 seconds, move to main menu scene
-        if not self.presented_scene and time.time() - self.start_time > 1:
-            self.present_modal_scene(MainMenuScene())
+        pass
     
     def touch_began(self, touch):
         # this method is called, when user touches the screen
@@ -42,6 +36,7 @@ class GameLogoScene(Scene):
     
     def touch_ended(self, touch):
         # this method is called, when user releases a finger from the screen
+        
         pass
     
     def did_change_size(self):

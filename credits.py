@@ -4,33 +4,38 @@
 
 from scene import *
 import ui
-import time
 
 from main_menu_scene import *
 
 
-class GameLogoScene(Scene):
+class SettingsScene(Scene):
     def setup(self):
         # this method is called, when user moves to this scene
         
-        # create timer, so that after 2 seconds move to next scene
-        self.start_time = time.time()
+        center_of_screen = self.size/2
         
         # add background color
         self.background = SpriteNode(position = self.size / 2, 
-                                     color = 'black', 
+                                     color = 'blue', 
                                      parent = self, 
                                      size = self.size)
-        self.logo = SpriteNode('./assets/sprites/asteroid.png',
+                                     
+        self.start_button = LabelNode(text = 'Design by: Mr.Coxall',
+                                      font=('Helvetica', 20),
+                                      parent = self,
+                                      position = self.size / 2,
+                                      scale = 0.75)
+                                      
+        back_button_position = self.size
+        back_button_position.x = 100
+        back_button_position.y = back_button_position.y - 100
+        self.back_button = SpriteNode('./assets_wed/sprites_wed/back_button.png',
                                        parent = self,
-                                       position = self.size/2,
-                                       size = self.size/2)
+                                       position = back_button_position)
+        
     def update(self):
         # this method is called, hopefully, 60 times a second
-        
-        # after 2 seconds, move to main menu scene
-        if not self.presented_scene and time.time() - self.start_time > 1:
-            self.present_modal_scene(MainMenuScene())
+        pass
     
     def touch_began(self, touch):
         # this method is called, when user touches the screen
@@ -42,7 +47,10 @@ class GameLogoScene(Scene):
     
     def touch_ended(self, touch):
         # this method is called, when user releases a finger from the screen
-        pass
+        
+        # if start button is pressed, goto game scene
+        if self.back_button.frame.contains_point(touch.location):
+            self.dismiss_modal_scene()
     
     def did_change_size(self):
         # this method is called, when user changes the orientation of the screen
