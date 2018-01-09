@@ -18,22 +18,25 @@ class GameScene(Scene):
         self.screen_center_x = self.size_of_screen_x/2
         self.screen_center_y = self.size_of_screen_y/2
         
-        self.score_position = Vector2
+        self.score_position = Vector2(self.screen_center_x, self.size_of_screen_y - 50)
         self.asteroids = []
         self.aliens = []
         self.scale_size = 0.75
         self.alien_attack_rate = 1
         self.asteroid_attack_rate = 1
-        self.alien_attack_speed = 20.0
-        self.asteroid_attack_speed = 20.0
+        self.alien_attack_speed = 30.0
+        self.asteroid_attack_speed = 30.0
+        self.score = 0
+        self.difficulty = 1
+        
         
         # add background color
         background_position = Vector2(self.screen_center_x, 
                                       self.screen_center_y)
         self.background = SpriteNode('./assets/sprites/star_background.png',
-                                     position = background_position, 
-                                     parent = self, 
-                                     size = self.size)
+                                        parent = self,
+                                        position = background_position,
+                                        size = self.size)
         
                                      
         planet_position = Vector2(self.screen_center_x, self.screen_center_y)
@@ -41,6 +44,11 @@ class GameScene(Scene):
                                     parent = self,
                                     position = planet_position,
                                     size = self.size/8)
+        self.score_label = LabelNode(text = 'score: ' + str(self.score),
+                                     font = ('helvetica', 20),
+                                     parent = self,
+                                     position = self.score_position)
+                                    
                                     
                                        
                                        
@@ -95,11 +103,15 @@ class GameScene(Scene):
         for alien in self.aliens:
         	if alien.frame.contains_point(touch.location):
         		self.aliens.remove(alien)
+        		self.score = self.score + 1
+        		self.show_score()
         		alien.remove_from_parent()
         		
         for asteroid in self.asteroids:
         	if asteroid.frame.contains_point(touch.location):
         		self.asteroids.remove(asteroid)
+        		self.score = self.score + 1
+        		self.show_score()
         		asteroid.remove_from_parent()
     
     def did_change_size(self):
@@ -170,3 +182,15 @@ class GameScene(Scene):
                                          self.asteroid_attack_speed,
                                          TIMING_SINODIAL)
         self.asteroids[len(self.asteroids)-1].run_action(asteroidMoveAction)
+        
+    def show_score(self):
+    	self.score_label.remove_from_parent()
+    	if self.score == 50 * self.difficulty:
+      	 self.alien_attack_rate = self.alien_attack_rate * 2
+      	 self.asteroid_attack_rate = self.asteroid_attack_rate * 2
+      	 self.difficulty = self.difficulty + 1
+    	self.score_label = LabelNode(text = 'score: ' + str(self.score),
+                                     font = ('helvetica', 20),
+                                     parent = self,
+                                     position = self.score_position)
+      
