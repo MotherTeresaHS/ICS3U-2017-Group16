@@ -7,6 +7,7 @@ from scene import *
 import ui
 from numpy import random
 from game_over import *
+import sound
 
 class GameScene(Scene):
     def setup(self):
@@ -70,15 +71,18 @@ class GameScene(Scene):
             #print('missile check')
             for alien in self.aliens:
                if alien.frame.intersects(self.planet.frame):
-                  self.present_modal_scene(GameOverScene())
+               	sound.play_effect('./assets/sounds/BarrelExploding.wav')
+               	self.game_over()
         else:
             pass
             #print(len(self.aliens))
             
         if len(self.asteroids) > 0:
         	  for asteroid in self.asteroids:
-        		    if asteroid.frame.intersects(self.planet.frame):
-        			     self.present_modal_scene(GameOverScene())
+        		   if asteroid.frame.intersects(self.planet.frame):
+        		   	sound.play_effect('./assets/sounds/BarrelExploding.wav')
+        		   	self.game_over()
+               	  
         else:
         	  pass
         
@@ -104,6 +108,7 @@ class GameScene(Scene):
         	if alien.frame.contains_point(touch.location):
         		self.aliens.remove(alien)
         		self.score = self.score + 1
+        		sound.play_effect('./assets/sounds/laser1.wav')
         		self.show_score()
         		alien.remove_from_parent()
         		
@@ -111,6 +116,7 @@ class GameScene(Scene):
         	if asteroid.frame.contains_point(touch.location):
         		self.asteroids.remove(asteroid)
         		self.score = self.score + 1
+        		sound.play_effect('./assets/sounds/laser1.wav')
         		self.show_score()
         		asteroid.remove_from_parent()
     
@@ -193,4 +199,16 @@ class GameScene(Scene):
                                      font = ('helvetica', 20),
                                      parent = self,
                                      position = self.score_position)
+                                     
+    def game_over(self):
+    	self.alien_attack_rate = 0
+    	self.asteroid_attack_rate = 0
+    	for alien in self.aliens:
+    		self.aliens.remove(alien)
+    		alien.remove_from_parent()
+    	for asteroid in self.asteroids:
+    		self.asteroids.remove(asteroid)
+    		asteroid.remove_from_parent()
+    	self.present_modal_scene(GameOverScene())
+      
       
