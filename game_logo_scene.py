@@ -21,7 +21,13 @@ class GameLogoScene(Scene):
                                      color = 'black', 
                                      parent = self, 
                                      size = self.size)
-        self.logo = SpriteNode('./assets/sprites/asteroid.png',
+        label_position = Vector2(self.size.x / 2, self.size.y - 100)
+        self.game_name = LabelNode(text = 'Planet Defense',
+                                   position = label_position,
+                                   font =('helvetica', 20),
+                                   parent = self,
+                                   scale = 4.00)
+        self.logo = SpriteNode('./assets/sprites/earth.png',
                                        parent = self,
                                        position = self.size/2,
                                        size = self.size/2)
@@ -30,7 +36,8 @@ class GameLogoScene(Scene):
         
         # after 2 seconds, move to main menu scene
         if not self.presented_scene and time.time() - self.start_time > 1:
-            self.present_modal_scene(MainMenuScene())
+        	  self.present_modal_scene(MainMenuScene())
+            
     
     def touch_began(self, touch):
         # this method is called, when user touches the screen
