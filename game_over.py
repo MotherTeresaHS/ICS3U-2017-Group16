@@ -13,8 +13,8 @@ class GameOverScene(Scene):
     def setup(self):
         # this method is called, when user moves to this scene
         center_of_screen = self.size/2
-        self.background = SpriteNode(position = self.size / 2, 
-                                     color = 'blue', 
+        self.background = SpriteNode('./assets/sprites/star_background.png',
+                                     position = self.size / 2, 
                                      parent = self, 
                                      size = self.size)
         position_game_over_label = Vector2(self.size.x/2, self.size.y - 200)
@@ -23,10 +23,11 @@ class GameOverScene(Scene):
                                          parent = self,
                                          position = position_game_over_label,
                                          scale = 2.00)
+        position_game_over_label2 = Vector2(self.size.x/2, self.size.y * 0.33)
         self.game_over_label2 = LabelNode(text = 'Would you like to:',
                                           font = ('helvetica', 20),
                                           parent = self,
-                                          position = self.size/2)
+                                          position = position_game_over_label2)
         play_again_label_position = Vector2(self.size.x * 0.66, 250)
         self.play_again_label = LabelNode(text = 'play again',
                                           font = ('helvetica', 20),
@@ -37,6 +38,9 @@ class GameOverScene(Scene):
                                               font = ('helvetica', 20),
                                               parent = self,
                                               position = return_to_menu_position)
+        self.explosion = SpriteNode('./assets/sprites/explosion.png',
+                                    parent = self,
+                                    position = self.size/2)
         play_again_button_position = Vector2(self.size.x * 0.66, 125)
         self.play_again_button = SpriteNode('./assets/sprites/start.png',
                                             parent = self,
@@ -67,11 +71,11 @@ class GameOverScene(Scene):
     def touch_ended(self, touch):
         # this method is called, when user releases a finger from the screen
         #if self.play_again_button.frame.contains_point(touch.location):
-            #self.present_modal_scene(GameScene())
+            #self.dismiss_modal_scene()
             
         # if start button is pressed, goto game scene
-        #if self.back_button.frame.contains_point(touch.location):
-            #self.present_modal_scene(MainMenuScene())
+        if self.back_button.frame.contains_point(touch.location):
+            self.present_modal_scene(MainMenuScene())
         pass
     
     def did_change_size(self):
