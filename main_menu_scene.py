@@ -5,14 +5,21 @@
 
 from scene import *
 import ui
+import time
 
 from game_scene import *
 from settings import *
 from tutorial import *
+from game_logo_scene import *
+import config
+from game_over import *
+
 
 class MainMenuScene(Scene):
     def setup(self):
         # this method is called, when user moves to this scene
+        
+        
         self.size_of_screen_x = self.size.x
         self.size_of_screen_y = self.size.y
         self.screen_center_x = self.size_of_screen_x/2
@@ -50,6 +57,11 @@ class MainMenuScene(Scene):
     
     def update(self):
         # this method is called, hopefully, 60 times a second
+        if config.main_menu == True:
+            self.dismiss_modal_scene()
+            config.main_menu = False
+            
+        
         pass
     
     def touch_began(self, touch):
@@ -66,6 +78,10 @@ class MainMenuScene(Scene):
         # if start button is pressed, goto game scene
         if self.start_button.frame.contains_point(touch.location):
             self.present_modal_scene(GameScene())
+            self.timer = time.time()
+            if not self.presented_scene and time.time() - self.timer > 1:
+            	print('dissmiss scene')
+            	self.dismiss_modal_scene()
             
         # if start button is pressed, goto game scene
         if self.tutorial_button.frame.contains_point(touch.location):
