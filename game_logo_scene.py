@@ -22,7 +22,7 @@ class GameLogoScene(Scene):
                                      parent = self, 
                                      size = self.size)
         label_position = Vector2(self.size.x / 2, self.size.y - 100)
-        self.game_name = LabelNode(text = 'Planet Defense',
+        self.game_name = LabelNode(text = 'Planet Defence',
                                    position = label_position,
                                    font =('helvetica', 20),
                                    parent = self,
