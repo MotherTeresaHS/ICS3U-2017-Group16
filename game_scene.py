@@ -8,6 +8,8 @@ import ui
 from numpy import random
 from game_over import *
 import sound
+import config
+
 
 class GameScene(Scene):
     def setup(self):
@@ -41,7 +43,7 @@ class GameScene(Scene):
         
                                      
         planet_position = Vector2(self.screen_center_x, self.screen_center_y)
-        self.planet = SpriteNode('./assets/sprites/asteroid.png',
+        self.planet = SpriteNode('./assets/sprites/earth.png',
                                     parent = self,
                                     position = planet_position,
                                     size = self.size/8)
@@ -49,13 +51,21 @@ class GameScene(Scene):
                                      font = ('helvetica', 20),
                                      parent = self,
                                      position = self.score_position)
-                                    
+        self.highscore_position = Vector2(100, self.size_of_screen_y - 50)
+        self.highscore_label = LabelNode(text = 'highscore: ' + str(config.highscore),
+                                         font = ('helvetica', 20),
+                                         parent = self,
+                                         position = self.highscore_position)
                                     
                                        
                                        
         
     def update(self):
         # this method is called, hopefully, 60 times a second
+        
+        if config.main_menu == True:
+            self.dismiss_modal_scene()
+            
         
         # every update, randomly check if a new alien should be created
         alien_create_chance = random.randint(1, 120)
@@ -66,22 +76,25 @@ class GameScene(Scene):
         if asteroid_create_chance <= self.asteroid_attack_rate:
             self.add_asteroid()
             
+        
             
         if len(self.aliens) > 0:
             #print('missile check')
             for alien in self.aliens:
                if alien.frame.intersects(self.planet.frame):
-               	sound.play_effect('./assets/sounds/BarrelExploding.wav')
-               	self.game_over()
+                   if config.sound == True:
+                       sound.play_effect('./assets/sounds/BarrelExploding.wav')
+                   self.game_over()
         else:
             pass
             #print(len(self.aliens))
             
         if len(self.asteroids) > 0:
-        	  for asteroid in self.asteroids:
-        		   if asteroid.frame.intersects(self.planet.frame):
-        		   	sound.play_effect('./assets/sounds/BarrelExploding.wav')
-        		   	self.game_over()
+            for asteroid in self.asteroids:
+                if asteroid.frame.intersects(self.planet.frame):
+                    if config.sound == True:
+                        sound.play_effect('./assets/sounds/BarrelExploding.wav')
+                    self.game_over()
                	  
         else:
         	  pass
@@ -105,20 +118,36 @@ class GameScene(Scene):
         
         # if start button is pressed, goto game scene
         for alien in self.aliens:
-        	if alien.frame.contains_point(touch.location):
-        		self.aliens.remove(alien)
-        		self.score = self.score + 1
-        		sound.play_effect('./assets/sounds/laser1.wav')
-        		self.show_score()
-        		alien.remove_from_parent()
+            if alien.frame.contains_point(touch.location):
+                self.aliens.remove(alien)
+                self.score = self.score + 1
+                if self.score > config.highscore:
+                    self.highscore_label.remove_from_parent()
+                    config.highscore = self.score
+                    self.highscore_label = LabelNode(text = 'highscore: ' + str(config.highscore),
+                                         font = ('helvetica', 20),
+                                         parent = self,
+                                         position = self.highscore_position)
+                if config.sound == True:
+                    sound.play_effect('./assets/sounds/laser1.wav')
+                self.show_score()
+                alien.remove_from_parent()
         		
         for asteroid in self.asteroids:
-        	if asteroid.frame.contains_point(touch.location):
-        		self.asteroids.remove(asteroid)
-        		self.score = self.score + 1
-        		sound.play_effect('./assets/sounds/laser1.wav')
-        		self.show_score()
-        		asteroid.remove_from_parent()
+            if asteroid.frame.contains_point(touch.location):
+                self.asteroids.remove(asteroid)
+                self.score = self.score + 1
+                if self.score > config.highscore:
+                    self.highscore_label.remove_from_parent()
+                    config.highscore = self.score
+                    self.highscore_label = LabelNode(text = 'highscore: ' + str(config.highscore),
+                                         font = ('helvetica', 20),
+                                         parent = self,
+                                         position = self.highscore_position)
+                if config.sound == True:
+                    sound.play_effect('./assets/sounds/laser1.wav')
+                self.show_score()
+                asteroid.remove_from_parent()
     
     def did_change_size(self):
         # this method is called, when user changes the orientation of the screen

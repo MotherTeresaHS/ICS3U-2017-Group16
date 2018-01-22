@@ -6,42 +6,39 @@ from scene import *
 import ui
 
 from main_menu_scene import *
-from game_scene import *
-import config
-import time
 
 
-class GameOverScene(Scene):
+class SettingsScene(Scene):
     def setup(self):
         # this method is called, when user moves to this scene
+        
         center_of_screen = self.size/2
-        self.background = SpriteNode('./assets/sprites/star_background.png',
-                                     position = self.size / 2, 
-                                     parent = self, 
-                                     size = self.size)
-        position_game_over_label = Vector2(self.size.x/2, self.size.y - 200)
-        self.game_over_label = LabelNode(text = 'Planet earth was destroyed!',
-                                         font = ('helvetica', 20),
-                                         parent = self,
-                                         position = position_game_over_label,
-                                         scale = 2.00)
-        return_to_menu_position = Vector2(self.size.x / 2, 250)
-        self.return_to_menu_label = LabelNode(text = 'return to main menu',
-                                              font = ('helvetica', 20),
-                                              parent = self,
-                                              position = return_to_menu_position)
-        self.explosion = SpriteNode('./assets/sprites/explosion.png',
-                                    parent = self,
-                                    position = self.size/2)
-        back_button_position = Vector2(self.size.x / 2, 125)
-        self.back_button = SpriteNode('./assets/sprites/back_button.png',
-                                      parent = self,
-                                      position = back_button_position,
-                                      scale = 0.75)
         
         # add background color
-        
-      
+        self.background = SpriteNode('./assets/sprites/star_background.png',
+        	                           position = self.size / 2, 
+                                     parent = self, 
+                                     size = self.size)
+                                     
+        sound_on_position = Vector2(self.size.x * 0.33, self.size.y * 0.66)
+        self.sound_on_button = LabelNode(text = 'Sound: ON',
+                                      font=('Helvetica', 20),
+                                      parent = self,
+                                      position = sound_on_position,
+                                      scale = 2.00)
+        sound_off_position = Vector2(self.size.x * 0.66, self.size.y * 0.66)
+        self.sound_off_button = LabelNode(text = ' Sound: OFF',
+                                           font = ('helvetica', 20),
+                                           parent = self,
+                                           position = sound_off_position,
+                                           scale = 2.00)
+                                      
+        back_button_position = self.size
+        back_button_position.x = 100
+        back_button_position.y = back_button_position.y - 100
+        self.back_button = SpriteNode('./assets/sprites/back_button.png',
+                                       parent = self,
+                                       position = back_button_position)
         
     def update(self):
         # this method is called, hopefully, 60 times a second
@@ -57,12 +54,14 @@ class GameOverScene(Scene):
     
     def touch_ended(self, touch):
         # this method is called, when user releases a finger from the screen
-            
+        
         # if start button is pressed, goto game scene
         if self.back_button.frame.contains_point(touch.location):
-            config.main_menu = True
             self.dismiss_modal_scene()
-        pass
+        if self.sound_on_button.frame.contains_point(touch.location):
+            config.sound = True
+        if self.sound_off_button.frame.contains_point(touch.location):
+            config.sound = False
     
     def did_change_size(self):
         # this method is called, when user changes the orientation of the screen
