@@ -20,7 +20,7 @@ class TutorialScene(Scene):
                                      parent = self, 
                                      size = self.size)
         instruction_position = Vector2(self.size.x / 2, self.size.y - 250)
-        self.instructions = LabelNode(text = 'Planet Earth is under attack by aliens.' + '\n' + 'Also to make things worse there are a ' + '\n' + 'large number of asteroids on collision course with earth.' + '\n' + 'Your job is to defend planet earth,' + '\n' + 'destroy the attackers by tapping them with your finger.',
+        self.instructions = LabelNode(text = 'Planet Earth is under attack by aliens.' + '\n' + 'To make things worse there are a ' + '\n' + 'large number of asteroids on collision course with earth.' + '\n' + 'Your job is to defend planet earth.' + '\n' + 'Destroy the attackers by tapping them with your finger.',
                                       font=('Helvetica', 20),
                                       parent = self,
                                       position = instruction_position,
@@ -68,7 +68,7 @@ class TutorialScene(Scene):
     def touch_ended(self, touch):
         # this method is called, when user releases a finger from the screen
         
-        # if start button is pressed, goto game scene
+        # if back button is pressed, return to main menu scene
         if self.back_button.frame.contains_point(touch.location):
             self.dismiss_modal_scene()
     

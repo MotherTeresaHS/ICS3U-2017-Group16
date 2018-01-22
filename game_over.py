@@ -38,7 +38,12 @@ class GameOverScene(Scene):
                                       parent = self,
                                       position = back_button_position,
                                       scale = 0.75)
-        
+        score_label_position = Vector2(self.size.x / 2, self.size.y - 250)
+        self.score_label = LabelNode(text = 'Your score was: ' + str(config.score),
+                                     font = ('helvetica', 20),
+                                     parent = self,
+                                     position = score_label_position,
+                                     scale = 2.00)
         # add background color
         
       
@@ -58,7 +63,7 @@ class GameOverScene(Scene):
     def touch_ended(self, touch):
         # this method is called, when user releases a finger from the screen
             
-        # if start button is pressed, goto game scene
+        # if back button is pressed, return to main menu scene
         if self.back_button.frame.contains_point(touch.location):
             config.main_menu = True
             self.dismiss_modal_scene()

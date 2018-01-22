@@ -16,7 +16,7 @@ class GameLogoScene(Scene):
         # create timer, so that after 2 seconds move to next scene
         self.start_time = time.time()
         
-        # add background color
+        # add background 
         self.background = SpriteNode(position = self.size / 2, 
                                      color = 'black', 
                                      parent = self, 
