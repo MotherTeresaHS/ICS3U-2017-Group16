@@ -50,10 +50,11 @@ class MainMenuScene(Scene):
                                        scale = 0.75)
         settings_button_position = Vector2(self.size.x - 200,
                                            100)
-        self.settings_button = SpriteNode('./assets/sprites/menu_button.png',
+        self.settings_button = LabelNode(text = 'SETTINGS',
+                                          font = ('helvetica', 20),
                                           parent = self,
                                           position = settings_button_position,
-                                          scale = 0.75)
+                                          scale = 2.00)
     
     def update(self):
         # this method is called, hopefully, 60 times a second
