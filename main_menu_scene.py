@@ -83,10 +83,10 @@ class MainMenuScene(Scene):
             	print('dissmiss scene')
             	self.dismiss_modal_scene()
             
-        # if start button is pressed, goto game scene
+        # if tutorial button is pressed, goto tutorial scene
         if self.tutorial_button.frame.contains_point(touch.location):
             self.present_modal_scene(TutorialScene())
-            
+        # if settings button is pressed, go to settings scene
         if self.settings_button.frame.contains_point(touch.location):
         	self.present_modal_scene(SettingsScene())
         pass

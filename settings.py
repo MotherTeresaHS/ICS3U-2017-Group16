@@ -14,7 +14,7 @@ class SettingsScene(Scene):
         
         center_of_screen = self.size/2
         
-        # add background color
+        # add background 
         self.background = SpriteNode('./assets/sprites/star_background.png',
         	                           position = self.size / 2, 
                                      parent = self, 
@@ -32,7 +32,13 @@ class SettingsScene(Scene):
                                            parent = self,
                                            position = sound_off_position,
                                            scale = 2.00)
-                                      
+        #credits
+        credit1_position = Vector2(self.size.x / 2, self.size.y / 2)
+        self.credit1 = LabelNode(text = 'explosion sprite: Gussprint',
+                                 font = ('helvetica', 20),
+                                 parent = self,
+                                 position = credit1_position,
+                                 scale = 1.00)
         back_button_position = self.size
         back_button_position.x = 100
         back_button_position.y = back_button_position.y - 100
@@ -55,11 +61,13 @@ class SettingsScene(Scene):
     def touch_ended(self, touch):
         # this method is called, when user releases a finger from the screen
         
-        # if start button is pressed, goto game scene
+        # if start button is pressed, goto main menu scene
         if self.back_button.frame.contains_point(touch.location):
             self.dismiss_modal_scene()
+        # toggle sound om
         if self.sound_on_button.frame.contains_point(touch.location):
             config.sound = True
+        # toggle sound off
         if self.sound_off_button.frame.contains_point(touch.location):
             config.sound = False
     

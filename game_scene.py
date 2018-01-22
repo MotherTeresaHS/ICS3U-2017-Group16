@@ -29,11 +29,11 @@ class GameScene(Scene):
         self.asteroid_attack_rate = 1
         self.alien_attack_speed = 30.0
         self.asteroid_attack_speed = 30.0
-        self.score = 0
+        config.score = 0
         self.difficulty = 1
         
         
-        # add background color
+        # add background
         background_position = Vector2(self.screen_center_x, 
                                       self.screen_center_y)
         self.background = SpriteNode('./assets/sprites/star_background.png',
@@ -47,7 +47,7 @@ class GameScene(Scene):
                                     parent = self,
                                     position = planet_position,
                                     size = self.size/8)
-        self.score_label = LabelNode(text = 'score: ' + str(self.score),
+        self.score_label = LabelNode(text = 'score: ' + str(config.score),
                                      font = ('helvetica', 20),
                                      parent = self,
                                      position = self.score_position)
@@ -71,15 +71,14 @@ class GameScene(Scene):
         alien_create_chance = random.randint(1, 120)
         if alien_create_chance <= self.alien_attack_rate:
             self.add_alien()
-            
+        # every update, randomly check if a new asteroid should be created
         asteroid_create_chance = random.randint(1, 120)
         if asteroid_create_chance <= self.asteroid_attack_rate:
             self.add_asteroid()
             
         
-            
+        # check if an alien touches the planet
         if len(self.aliens) > 0:
-            #print('missile check')
             for alien in self.aliens:
                if alien.frame.intersects(self.planet.frame):
                    if config.sound == True:
@@ -87,8 +86,8 @@ class GameScene(Scene):
                    self.game_over()
         else:
             pass
-            #print(len(self.aliens))
             
+        # check if an asteroid touches the plant
         if len(self.asteroids) > 0:
             for asteroid in self.asteroids:
                 if asteroid.frame.intersects(self.planet.frame):
@@ -116,14 +115,14 @@ class GameScene(Scene):
     def touch_ended(self, touch):
         # this method is called, when user releases a finger from the screen
         
-        # if start button is pressed, goto game scene
+        # when an alien is touched remove it and update score
         for alien in self.aliens:
             if alien.frame.contains_point(touch.location):
                 self.aliens.remove(alien)
-                self.score = self.score + 1
-                if self.score > config.highscore:
+                config.score = config.score + 1
+                if config.score > config.highscore:
                     self.highscore_label.remove_from_parent()
-                    config.highscore = self.score
+                    config.highscore = config.score
                     self.highscore_label = LabelNode(text = 'highscore: ' + str(config.highscore),
                                          font = ('helvetica', 20),
                                          parent = self,
@@ -132,14 +131,14 @@ class GameScene(Scene):
                     sound.play_effect('./assets/sounds/laser1.wav')
                 self.show_score()
                 alien.remove_from_parent()
-        		
+        # when an asteroid is touched remove it and update score		
         for asteroid in self.asteroids:
             if asteroid.frame.contains_point(touch.location):
                 self.asteroids.remove(asteroid)
-                self.score = self.score + 1
-                if self.score > config.highscore:
+                config.score = config.score + 1
+                if config.score > config.highscore:
                     self.highscore_label.remove_from_parent()
-                    config.highscore = self.score
+                    config.highscore = config.score
                     self.highscore_label = LabelNode(text = 'highscore: ' + str(config.highscore),
                                          font = ('helvetica', 20),
                                          parent = self,
@@ -184,7 +183,7 @@ class GameScene(Scene):
                              position = alien_start_position,
                              parent = self))
         
-        # make missile move forward
+        # make alien move to planet
         alienMoveAction = Action.move_to(alien_end_position.x, 
                                          alien_end_position.y, 
                                          self.alien_attack_speed,
@@ -192,7 +191,7 @@ class GameScene(Scene):
         self.aliens[len(self.aliens)-1].run_action(alienMoveAction)
     
     def add_asteroid(self):
-        # add a new alien to come down
+        # add a new asteroid to come down
         
         asteroid_start_position = Vector2()
         asteroid_start_position.x = random.randint(0, self.size_of_screen_x)
@@ -211,7 +210,7 @@ class GameScene(Scene):
                              parent = self,
                              size = self.size / 8))
         
-        # make missile move forward
+        # make asteroid move to planet
         asteroidMoveAction = Action.move_to(asteroid_end_position.x, 
                                          asteroid_end_position.y, 
                                          self.asteroid_attack_speed,
@@ -219,17 +218,19 @@ class GameScene(Scene):
         self.asteroids[len(self.asteroids)-1].run_action(asteroidMoveAction)
         
     def show_score(self):
+    	# update score label when enemies are defeted
     	self.score_label.remove_from_parent()
-    	if self.score == 50 * self.difficulty:
+    	if config.score == 50 * self.difficulty:
       	 self.alien_attack_rate = self.alien_attack_rate * 2
       	 self.asteroid_attack_rate = self.asteroid_attack_rate * 2
       	 self.difficulty = self.difficulty + 1
-    	self.score_label = LabelNode(text = 'score: ' + str(self.score),
+    	self.score_label = LabelNode(text = 'score: ' + str(config.score),
                                      font = ('helvetica', 20),
                                      parent = self,
                                      position = self.score_position)
                                      
     def game_over(self):
+    	# stop the game from proceeding in background after game over
     	self.alien_attack_rate = 0
     	self.asteroid_attack_rate = 0
     	for alien in self.aliens:
